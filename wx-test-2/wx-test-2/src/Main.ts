@@ -136,6 +136,16 @@ class Main extends egret.DisplayObjectContainer {
         input.verticalAlign = egret.VerticalAlign.MIDDLE;
         input.type = egret.TextFieldType.INPUT;
 
+        // 角色背景
+        let roleBg = this.createBitmapByName("bg_blue_png");
+        roleBg.width = stageW - 150;
+        roleBg.height = stageH / 2.8;
+        roleBg.anchorOffsetX = roleBg.width / 2;
+        roleBg.anchorOffsetY = roleBg.height / 1.5;
+        roleBg.x = stageW * .5;
+        roleBg.y = stageH * .5;
+        this.addChild( roleBg );
+
         // 角色 男
         let roleMan = this.createBitmapByName("role_man_png");
         roleMan.width = stageW - 200;
@@ -146,7 +156,7 @@ class Main extends egret.DisplayObjectContainer {
         roleMan.y = stageH * .5;
         this.addChild( roleMan );
 
-        
+
 
          // 开始游戏 btn
         let startGameBtn = this.createBitmapByName("btn_start_game_png");
