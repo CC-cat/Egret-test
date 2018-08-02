@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,hero_pic2_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,pic_1_jpg,pic_2_jpg,pic_3_jpg,pic_4_jpg,name_bg_png,btn_1_png,btn_2_png,btn_3_png,btn_start_game_png,arrow_left_png,arrow_right_png,bg_blue_png,role_man_png",
 			"name": "preload"
 		}
 	],
@@ -17,19 +17,74 @@
 			"url": "assets/egret_icon.png"
 		},
 		{
-			"name": "hero_pic_png",
-			"type": "image",
-			"url": "assets/hero_pic.png"
-		},
-		{
 			"name": "description_json",
 			"type": "json",
 			"url": "config/description.json"
 		},
 		{
-			"name": "hero_pic2_png",
+			"name": "pic_1_jpg",
 			"type": "image",
-			"url": "assets/hero_pic.png"
+			"url": "assets/pic_1.jpg"
+		},
+		{
+			"name": "pic_2_jpg",
+			"type": "image",
+			"url": "assets/pic_2.jpg"
+		},
+		{
+			"name": "pic_3_jpg",
+			"type": "image",
+			"url": "assets/pic_3.jpg"
+		},
+		{
+			"name": "pic_4_jpg",
+			"type": "image",
+			"url": "assets/pic_4.jpg"
+		},
+		{
+			"name": "name_bg_png",
+			"type": "image",
+			"url": "assets/name_bg.png"
+		},
+		{
+			"name": "btn_1_png",
+			"type": "image",
+			"url": "assets/btn_1.png"
+		},
+		{
+			"name": "btn_2_png",
+			"type": "image",
+			"url": "assets/btn_2.png"
+		},
+		{
+			"name": "btn_3_png",
+			"type": "image",
+			"url": "assets/btn_3.png"
+		},
+		{
+			"name": "btn_start_game_png",
+			"type": "image",
+			"url": "assets/btn_start_game.png"
+		},
+		{
+			"name": "arrow_left_png",
+			"type": "image",
+			"url": "assets/arrow_left.png"
+		},
+		{
+			"name": "arrow_right_png",
+			"type": "image",
+			"url": "assets/arrow_right.png"
+		},
+		{
+			"name": "bg_blue_png",
+			"type": "image",
+			"url": "assets/bg_blue.png"
+		},
+		{
+			"name": "role_man_png",
+			"type": "image",
+			"url": "assets/role_man.png"
 		}
 	]
 }

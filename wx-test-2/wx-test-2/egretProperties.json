@@ -19,24 +19,6 @@
       "name": "assetsmanager"
     },
     {
-      "name": "eui"
-    },
-    {
-      "name": "experimental"
-    },
-    {
-      "name": "dragonBones"
-    },
-    {
-      "name": "socket"
-    },
-    {
-      "name": "egretia-sdk"
-    },
-    {
-      "name": "egret-facebook"
-    },
-    {
       "name": "promise"
     }
   ]
