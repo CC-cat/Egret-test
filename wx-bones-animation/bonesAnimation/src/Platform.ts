@@ -10,6 +10,8 @@ declare interface Platform {
 
     login(): Promise<any>
 
+    openDataContext: any;
+
 }
 
 class DebugPlatform implements Platform {
@@ -19,6 +21,8 @@ class DebugPlatform implements Platform {
     async login() {
 
     }
+
+    openDataContext
 }
 
 

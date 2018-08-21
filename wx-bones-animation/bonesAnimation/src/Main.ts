@@ -59,9 +59,9 @@ class Main extends eui.UILayer {
 
     private async runGame() {
         await this.loadResource()
-        this.createGameScene();
+        this.createTestScene();
         const result = await RES.getResAsync("description_json")
-        this.startAnimation(result);
+        // this.startAnimation(result);
         await platform.login();
         const userInfo = await platform.getUserInfo();
         console.log(userInfo);
@@ -99,6 +99,43 @@ class Main extends eui.UILayer {
      * 创建场景界面
      * Create scene interface
      */
+    protected async createTestScene() {
+        let sky = this.createBitmapByName("bg_jpg");
+        this.addChild(sky);
+        let stageW = this.stage.stageWidth;
+        let stageH = this.stage.stageHeight;
+        sky.width = stageW;
+        sky.height = stageH;
+
+        let topMask = new egret.Shape();
+        topMask.graphics.beginFill(0x000000, 0.5);
+        topMask.graphics.drawRect(0, 0, stageW, stageH);
+        topMask.graphics.endFill();
+        this.addChild(topMask);
+
+        /* 
+            调取 微信排行榜接口
+        */
+
+        // 添加到舞台  // 创建bitmap
+        this.$parent.addChild(platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight))
+
+        // 向子域发送加载资源的消息
+        await platform.openDataContext.postMessage({
+            title: 'Title',
+            text: 'Hello',
+            time: (new Date()).getFullYear() + 1,
+            command: 'loadRes'
+        })
+
+        // 向子域发送 “打开排行榜” 的消息
+        await platform.openDataContext.postMessage({
+            time: (new Date()).getFullYear() + 2,
+            command: 'open'
+        })
+
+    }
+
     protected createGameScene(): void {
         let sky = this.createBitmapByName("bg_jpg");
         this.addChild(sky);
@@ -118,15 +155,15 @@ class Main extends eui.UILayer {
         */
 
         // 实例化DragonBones所需要的数据
-        var dragonbonesData = RES.getRes( "Robot_json" );  
-        var textureData = RES.getRes( "texture_json" );  
-        var texture = RES.getRes( "texture_png" );
+        var dragonbonesData = RES.getRes("Robot_json");
+        var textureData = RES.getRes("texture_json");
+        var texture = RES.getRes("texture_png");
 
         // 设置动画中绑定的贴图
         let egretFactory: dragonBones.EgretFactory = dragonBones.EgretFactory.factory;
-        egretFactory.parseDragonBonesData(dragonbonesData);  
+        egretFactory.parseDragonBonesData(dragonbonesData);
         egretFactory.parseTextureAtlasData(textureData, texture);
-        
+
         // 1
         let armatureDisplay: dragonBones.EgretArmatureDisplay = egretFactory.buildArmatureDisplay("robot");
         this.addChild(armatureDisplay);
@@ -136,12 +173,12 @@ class Main extends eui.UILayer {
         armatureDisplay.scaleY = 0.5;
         // armatureDisplay.animation.play("Walk");
 
-        
+
         // 2
         let egretFactoryB: dragonBones.EgretFactory = dragonBones.EgretFactory.factory;
-        egretFactoryB.parseDragonBonesData(dragonbonesData);  
+        egretFactoryB.parseDragonBonesData(dragonbonesData);
         egretFactoryB.parseTextureAtlasData(textureData, texture);
-     
+
         let armatureDisplayB: dragonBones.EgretArmatureDisplay = egretFactoryB.buildArmatureDisplay("robot");
         this.addChild(armatureDisplayB);
         armatureDisplayB.x = 480;
@@ -155,12 +192,12 @@ class Main extends eui.UILayer {
 
         let animationState = armatureDisplayB.animation.fadeIn("Run", 0.2, 0, 0, "NORMAL_ANIMATION_GROUP");
         animationState.addBoneMask("body_u");
-        
+
 
         // Event listener.
         function animationEventHandler(event: dragonBones.EgretEvent): void {
             let eventObject = event.eventObject;
-            
+
             console.log(eventObject.animationState.name, event.type, eventObject.name ? eventObject.name : "");
         }
 
