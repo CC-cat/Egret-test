@@ -54,96 +54,96 @@ const totalGroup = [{
     url: assets.icon,
     scroes: 10000
   },
-  {
-    key: 2,
-    name: "2222222222",
-    url: assets.icon,
-    scroes: 9000
-  },
-  {
-    key: 3,
-    name: "3333333",
-    url: assets.icon,
-    scroes: 8000
-  },
-  {
-    key: 4,
-    name: "4444444",
-    url: assets.icon,
-    scroes: 7000
-  },
-  {
-    key: 5,
-    name: "55555555",
-    url: assets.icon,
-    scroes: 6000
-  },
-  {
-    key: 6,
-    name: "6666666",
-    url: assets.icon,
-    scroes: 5000
-  },
-  {
-    key: 7,
-    name: "7777777",
-    url: assets.icon,
-    scroes: 4000
-  },
-  {
-    key: 8,
-    name: "8888888",
-    url: assets.icon,
-    scroes: 3000
-  },
-  {
-    key: 9,
-    name: "9999999",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 10,
-    name: "1010101010",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 11,
-    name: "111111111111",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 12,
-    name: "121212121212",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 13,
-    name: "13131313",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 14,
-    name: "1414141414",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 15,
-    name: "1515151515",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 16,
-    name: "1616161616",
-    url: assets.icon,
-    scroes: 2000
-  },
+  // {
+  //   key: 2,
+  //   name: "2222222222",
+  //   url: assets.icon,
+  //   scroes: 9000
+  // },
+  // {
+  //   key: 3,
+  //   name: "3333333",
+  //   url: assets.icon,
+  //   scroes: 8000
+  // },
+  // {
+  //   key: 4,
+  //   name: "4444444",
+  //   url: assets.icon,
+  //   scroes: 7000
+  // },
+  // {
+  //   key: 5,
+  //   name: "55555555",
+  //   url: assets.icon,
+  //   scroes: 6000
+  // },
+  // {
+  //   key: 6,
+  //   name: "6666666",
+  //   url: assets.icon,
+  //   scroes: 5000
+  // },
+  // {
+  //   key: 7,
+  //   name: "7777777",
+  //   url: assets.icon,
+  //   scroes: 4000
+  // },
+  // {
+  //   key: 8,
+  //   name: "8888888",
+  //   url: assets.icon,
+  //   scroes: 3000
+  // },
+  // {
+  //   key: 9,
+  //   name: "9999999",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 10,
+  //   name: "1010101010",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 11,
+  //   name: "111111111111",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 12,
+  //   name: "121212121212",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 13,
+  //   name: "13131313",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 14,
+  //   name: "1414141414",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 15,
+  //   name: "1515151515",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
+  // {
+  //   key: 16,
+  //   name: "1616161616",
+  //   url: assets.icon,
+  //   scroes: 2000
+  // },
 ];
 
 /**
@@ -163,6 +163,7 @@ function drawRankPanel() {
   //起始id
   const startID = perPageMaxNum * page;
   currentGroup = totalGroup.slice(startID, startID + perPageMaxNum);
+  console.log(currentGroup);
   //创建头像Bar
   drawRankByGroup(currentGroup);
   //创建按钮
@@ -439,25 +440,55 @@ let hasLoadRes;
 // 改动后
 function preloadAssets() {
   return new Promise((resolve, reject) => {
-  let preloaded = 0;
-  let count = 0;
-  for (let asset in assetsUrl) {
-    count++;
-    const img = wx.createImage();
-    img.onload = () => {
-      preloaded++;
-      if (preloaded == count) {
-        console.log("加载完成");
-        resolve()
-        hasLoadRes = true;
-      }
+    console.log('大笨蛋');
+    let preloaded = 0;
+    let count = 0;
+    console.log(assetsUrl);
 
+    for (let asset in assetsUrl) {
+      count++;
+      const img = wx.createImage();
+      img.onload = () => {
+        preloaded++;
+        if (preloaded == count) {
+          console.log("加载完成");
+          resolve()
+          hasLoadRes = true;
+        }
+
+      }
+      img.src = assetsUrl[asset];
+      assets[asset] = img;
+      console.log(assets[asset]);
     }
-    img.src = assetsUrl[asset];
-    assets[asset] = img;
-  }
   })
 }
+// function preloadAssets() {
+//   return new Promise((resolve, reject) => {
+//     console.log(resolve);
+//     console.log(reject);
+//     console.log('大笨蛋');
+//     let preloaded = 0;
+//     let count = 0;
+//     for (let asset in assetsUrl) {
+//       console.log(asset);
+//       console.log(assetsUrl);
+//       count++;
+//       const img = wx.createImage();
+//       img.onload = () => {
+//         preloaded++;
+//         if (preloaded == count) {
+//           console.log("加载完成");
+//           resolve()
+//           hasLoadRes = true;
+//         }
+
+//       }
+//       img.src = assetsUrl[asset];
+//       assets[asset] = img;
+//     }
+//   })
+// }
 
 // 改动后
 // function preloadAssets() {
@@ -506,48 +537,23 @@ let hasCreateScene;
  * 增加来自主域的监听函数
  */
 // 改动后
-function addOpenDataContextListener() {
-  console.log('增加监听函数')
-  wx.onMessage((data) => {
-    console.log(data);
-    if (data.command == 'open') {
-      preloadAssets()
-      .then((res) => {
-      if (!hasCreateScene) {
-        //创建并初始化
-        hasCreateScene = createScene();
-      }
-      requestAnimationFrameID = requestAnimationFrame(loop);
-      console.log('finished');
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    } else if (data.command == 'close' && requestAnimationFrameID) {
-      cancelAnimationFrame(requestAnimationFrameID);
-      requestAnimationFrameID = null
-    } else if (data.command == 'loadRes' && !hasLoadRes) {
-      /**
-       * 加载资源函数
-       * 只需要加载一次
-       */
-      // console.log('加载资源')
-      // preloadAssets();
-    }
-  });
-}
-
-// 改动前
 // function addOpenDataContextListener() {
 //   console.log('增加监听函数')
 //   wx.onMessage((data) => {
 //     console.log(data);
 //     if (data.command == 'open') {
+//       preloadAssets()
+//       .then((res) => {
 //       if (!hasCreateScene) {
 //         //创建并初始化
 //         hasCreateScene = createScene();
 //       }
 //       requestAnimationFrameID = requestAnimationFrame(loop);
+//       console.log('finished');
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       })
 //     } else if (data.command == 'close' && requestAnimationFrameID) {
 //       cancelAnimationFrame(requestAnimationFrameID);
 //       requestAnimationFrameID = null
@@ -557,10 +563,36 @@ function addOpenDataContextListener() {
 //        * 只需要加载一次
 //        */
 //       // console.log('加载资源')
-//       preloadAssets();
+//       // preloadAssets();
 //     }
 //   });
 // }
+
+// 改动前
+function addOpenDataContextListener() {
+  console.log('增加监听函数')
+  wx.onMessage((data) => {
+    console.log(data);
+    if (data.command == 'open') {
+      if (!hasCreateScene) {
+        //创建并初始化
+        hasCreateScene = createScene();
+      }
+      requestAnimationFrameID = requestAnimationFrame(loop);
+    } else if (data.command == 'close' && requestAnimationFrameID) {
+      cancelAnimationFrame(requestAnimationFrameID);
+      requestAnimationFrameID = null
+    } else if (data.command == 'loadRes' && !hasLoadRes) {
+      /**
+       * 加载资源函数
+       * 只需要加载一次
+       */
+      // console.log('加载资源')
+      preloadAssets();
+
+    }
+  });
+}
 
 addOpenDataContextListener();
 

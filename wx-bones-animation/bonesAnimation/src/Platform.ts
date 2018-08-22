@@ -10,7 +10,11 @@ declare interface Platform {
 
     login(): Promise<any>
 
+    //存储排行数据
+    setUserCloudStorage(kvobj:any):void;
+    
     openDataContext: any;
+
 
 }
 
@@ -22,7 +26,12 @@ class DebugPlatform implements Platform {
 
     }
 
+    async setUserCloudStorage(kvobj:any){
+        
+    }
+
     openDataContext
+    
 }
 
 

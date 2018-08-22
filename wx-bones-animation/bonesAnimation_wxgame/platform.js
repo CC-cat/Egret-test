@@ -34,6 +34,22 @@ class WxgamePlatform {
         })
     }
 
+    // 不好用，先留着
+    setUserCloudStorage(KVDataList) {
+        return new Promise((resolve, reject) => {
+          wx.setUserCloudStorage({
+            KVDataList: KVDataList,
+            success: res => {
+              console.log('success', res);
+              resolve(res);
+            },
+            fail: res => {
+              console.log('fail', res);
+            }
+          })
+        })
+    }
+
     openDataContext = new WxgameOpenDataContext();
 }
 
