@@ -32,10 +32,22 @@ class Main extends eui.UILayer {
     private bitmap: egret.Bitmap;
     private isdisplay = false;
     private rankBtn: eui.Button;
-    private exitRankBtn: eui.Button;
-    private rankingListMask: egret.Shape;
+    // private exitRankBtn: eui.Button;
+    // private rankingListMask: egret.Shape;
     private userNameInput: egret.TextField;
     private userInfo;
+    private scrollerPanel: ScrollerPanel;
+
+    // 好友排行
+    private _friendRankBtn: eui.Button;
+    private _rankMask: egret.Shape;
+    private _rankBit: egret.Bitmap;
+    private _mask: egret.Shape;
+
+    // 群排行
+    private _groupRanktBtn: eui.Button;
+
+
 
     protected createChildren(): void {
         super.createChildren();
@@ -68,14 +80,21 @@ class Main extends eui.UILayer {
     }
 
     private async runGame() {
+        const platform: any = window.platform;
+
         await this.loadResource()
         this.createGameScene();
         // const result = await RES.getResAsync("description_json")
-        // this.startAnimation(result);
         await platform.login();
         const userInfo = await platform.getUserInfo();
         this.userInfo = userInfo;
         console.log(this.userInfo);
+
+        platform.sendShareData({ 
+            command: "load" 
+        });
+
+        
     }
 
     private async loadResource() {
@@ -113,117 +132,122 @@ class Main extends eui.UILayer {
         result.texture = texture;
         return result;
     }
-    /**
-     * 描述文件加载成功，开始播放动画
-     * Description file loading is successful, start to play the animation
-     */
-    private startAnimation(result: Array<any>): void {
-        // let parser = new egret.HtmlTextParser();
 
-        // let textflowArr = result.map(text => parser.parse(text));
-        // let textfield = this.textfield;
-        // let count = -1;
-        // let change = () => {
-        //     count++;
-        //     if (count >= textflowArr.length) {
-        //         count = 0;
-        //     }
-        //     let textFlow = textflowArr[count];
-
-        //     // 切换描述内容
-        //     // Switch to described content
-        //     textfield.textFlow = textFlow;
-        //     let tw = egret.Tween.get(textfield);
-        //     tw.to({ "alpha": 1 }, 200);
-        //     tw.wait(2000);
-        //     tw.to({ "alpha": 0 }, 200);
-        //     tw.call(change, this);
-        // };
-
-        // change();
-    }
     private textfield: egret.TextField;
     /**
      * 创建场景界面
      * Create scene interface
      */
     protected createGameScene(): void {
-        let sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
         let stageW = this.stage.stageWidth;
         let stageH = this.stage.stageHeight;
+
+        let sky = this.createBitmapByName("bg_jpg");
         sky.width = stageW;
         sky.height = stageH;
+        this.addChild(sky);
+
+        // 遮罩
+        this._mask=new egret.Shape();
+		this._mask.graphics.beginFill(0x000000,0.7);
+		this._mask.graphics.drawRect(0,0, stageW, stageH);
+		this._mask.graphics.endFill();
+		this.addChild(this._mask);
 
         // 好友排行榜按钮
-        this.rankBtn = new eui.Button();
-        this.rankBtn.label = "排行";
-        this.rankBtn.x = stageW / 2;
-        this.rankBtn.y = stageH / 2;
-        this.addChild(this.rankBtn);
-        this.rankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onClickRankBtn, this);
+        this._friendRankBtn=new eui.Button();
+        this._friendRankBtn.label = "好友排行";
+		this._friendRankBtn.y= 100;
+		this._friendRankBtn.x= 30;
+		this._friendRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,this.friendRank,this);
+		this.addChild(this._friendRankBtn);
+
+        this._groupRanktBtn=new eui.Button();
+        this._groupRanktBtn.label = "群排行";
+		this._groupRanktBtn.y=this._friendRankBtn.y;
+		this._groupRanktBtn.x= this._friendRankBtn.x + this._friendRankBtn.width + 20;
+        this._groupRanktBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,this.clickGroup,this);
+		this.addChild(this._groupRanktBtn);
+
         // 加载 好友排行榜资源
-        const platform: any = window.platform;
         platform.openDataContext.postMessage({
             command: 'loadRes'
         });
 
-        // 好友排行榜 返回按钮
-        this.exitRankBtn = new eui.Button();
-        this.exitRankBtn.label = "返回";
-        this.exitRankBtn.x = stageW / 4;
-        this.exitRankBtn.y = stageH - 100;
-        this.exitRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
-             this.isdisplay = true;
-             this.onClickRankBtn();
-        }, this);
+        // 处理遮罩，避免开放数据域事件影响主域。
+        this._rankMask=new egret.Shape();
+		this._rankMask.graphics.beginFill(0x000000,0.5);
+		this._rankMask.graphics.drawRect(0,0,stageW,stageH);
+		this._rankMask.graphics.endFill();
+		this.addChild(this._rankMask);
+		this._rankMask.touchEnabled=true;
+		this._rankMask.visible=false;
 
+      
         // 用户分数收集
-        let title: egret.TextField = new egret.TextField();
-        title.text = "请输入分数：";
-        title.x = 40;
-        title.y = 200;
-        title.textColor = 0xffffff;
-        title.stroke = 3;
-        title.strokeColor = 0x999999;
-        this.addChild(title);
+        // let title: egret.TextField = new egret.TextField();
+        // title.text = "请输入分数：";
+        // title.x = 40;
+        // title.y = 100;
+        // title.textColor = 0xffffff;
+        // title.stroke = 3;
+        // title.strokeColor = 0x999999;
+        // this.addChild(title);
+
 
         // 用户输入框
-        this.userNameInput = new egret.TextField();
-        this.userNameInput.type = egret.TextFieldType.INPUT;
-        this.userNameInput.width = 360;
-        this.userNameInput.height = 60;
-        this.userNameInput.border = true;
-        this.userNameInput.borderColor = 0x999999;
-        this.userNameInput.verticalAlign = egret.VerticalAlign.MIDDLE;
-        this.userNameInput.textAlign = egret.HorizontalAlign.CENTER;
-        this.userNameInput.x = title.x + title.width + 10;
-        this.userNameInput.y = title.y - 10;
-        this.userNameInput.text = '';
-        this.userNameInput.textColor = 0x000000;
-        this.addChild(this.userNameInput);
+        // this.userNameInput = new egret.TextField();
+        // this.userNameInput.type = egret.TextFieldType.INPUT;
+        // this.userNameInput.width = 360;
+        // this.userNameInput.height = 60;
+        // this.userNameInput.border = true;
+        // this.userNameInput.borderColor = 0x999999;
+        // this.userNameInput.verticalAlign = egret.VerticalAlign.MIDDLE;
+        // this.userNameInput.textAlign = egret.HorizontalAlign.CENTER;
+        // this.userNameInput.x = title.x + title.width + 10;
+        // this.userNameInput.y = title.y - 10;
+        // this.userNameInput.text = '';
+        // this.userNameInput.textColor = 0x000000;
+        // this.addChild(this.userNameInput);
 
-        // 用户输入框 白色背景
-        let userNameInputBg = new egret.Shape;
-        userNameInputBg.graphics.beginFill(0xffffff, 1);
-        userNameInputBg.width = this.userNameInput.width;
-        userNameInputBg.height = this.userNameInput.height;
-        userNameInputBg.x = this.userNameInput.x;
-        userNameInputBg.y = this.userNameInput.y;
-        userNameInputBg.graphics.drawRect(0, 0, this.userNameInput.width, this.userNameInput.height);
-        userNameInputBg.graphics.endFill();
-        userNameInputBg.alpha = 0.8;
-        this.addChild(userNameInputBg);
+        // // 用户输入框 白色背景
+        // let userNameInputBg = new egret.Shape;
+        // userNameInputBg.graphics.beginFill(0xffffff, 1);
+        // userNameInputBg.width = this.userNameInput.width;
+        // userNameInputBg.height = this.userNameInput.height;
+        // userNameInputBg.x = this.userNameInput.x;
+        // userNameInputBg.y = this.userNameInput.y;
+        // userNameInputBg.graphics.drawRect(0, 0, this.userNameInput.width, this.userNameInput.height);
+        // userNameInputBg.graphics.endFill();
+        // userNameInputBg.alpha = 0.8;
+        // this.addChild(userNameInputBg);
 
-        this.setChildIndex(userNameInputBg, 1);
-        this.setChildIndex(this.userNameInput, 2);
+        
+        // this.setChildIndex(userNameInputBg, 3);
+        // this.setChildIndex(this.userNameInput, 4);
+
+        this.scrollerPanel = new ScrollerPanel();
+        this.scrollerPanel.x = 10;
+        this.scrollerPanel.y = 200;
+        this.addChild(this.scrollerPanel);
+
+        // 这块需要用到eui的可视化编辑功能，请下载代码示例查看
+        // ListGroup是EXML文件，可以进行可视化编辑
+        var listGroup = new components.ListGroup();
+        listGroup.width = 400;
+        listGroup.height = 500;
+        listGroup.x = 30;
+        listGroup.y = 400;
+        this.addChild(listGroup);
+
 
     }
 
+    /*
     private onClickRankBtn() {
-        let platform: any = window.platform;
+        // const platform: any = window.platform;
         if (this.isdisplay) {
-            console.log('点击 返回 按钮');
+            console.log('点击 关闭 按钮');
             
             this.bitmap.parent && this.bitmap.parent.removeChild(this.bitmap);
             this.rankingListMask.parent && this.rankingListMask.parent.removeChild(this.rankingListMask);
@@ -239,8 +263,7 @@ class Main extends eui.UILayer {
 
         } else {
             console.log('点击 好友排行榜 按钮');
-            console.log(this.userNameInput.text);
-
+            // console.log(this.userNameInput.text);
 
             //处理遮罩，避免开放数据域事件影响主域。
             this.rankingListMask = new egret.Shape();
@@ -258,12 +281,11 @@ class Main extends eui.UILayer {
             //主域向子域发送自定义消息
             platform.openDataContext.postMessage({
                 isDisplay: this.isdisplay,
-                text: this.userNameInput.text,
                 data: {
                     key:'',
                     name: this.userInfo.nickName,
                     url: this.userInfo.avatarUrl,
-                    scroes: this.userNameInput.text
+                    scroes: '11'
                 },
                 year: (new Date()).getFullYear(),
                 command: "open"
@@ -274,8 +296,8 @@ class Main extends eui.UILayer {
 
 
             // 上传分数 不好用，先留着
-            let score = this.userNameInput.text;
-            platform.setUserCloudStorage([{key:"score", value: score + ""}]);
+            // let score = '11';
+            // platform.setUserCloudStorage([{key:"score", value: score + ""}]);
             // 上传分数 不好用，先留着
 
             // 返回按钮
@@ -283,5 +305,78 @@ class Main extends eui.UILayer {
             
         }
     }
+    */
+
+    // 好友排行榜 点击onclick
+    private friendRank():void
+	{
+		this._rankMask.visible=true;
+
+		platform.sendShareData({
+            command:"open",
+            type:"friend"
+        });
+
+		this._rankBit = platform.openDataContext.createDisplayObject(null,this.stage.stageWidth, this.stage.stageHeight);
+		this._rankBit.touchEnabled=true;
+		this._rankBit.pixelHitTest=true;
+		this._rankMask.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onMask,this);
+		this.addChild(this._rankBit);
+	}
+
+    // 遮罩
+    private onMask(e:egret.TouchEvent):void
+	{
+		platform.sendShareData({
+            command:"close"
+        });
+
+		this._mask.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.onMask,this);
+		this._rankMask.visible=false;
+		this.removeChild(this._rankBit);
+	}
+
+    // 群排行榜 点击onclick
+    private clickGroup()
+	{
+		var desc:string="vae"
+		var imgurl:string="resource/assets/icon"+(1+Math.floor(Math.random()*4))+".jpg";
+
+		return new Promise((resolve, reject) => {
+            platform.updateShareMenu(true).then(data => {
+                    console.log(data);
+                    if (data) {
+                        return platform.shareApp("群主别踢,我就是看看谁的手速最快,"+desc,imgurl,desc).then(data => {
+                            if (data && data.shareTickets && data.shareTickets.length > 0) {
+                                this.groupRank(data.shareTickets[0]);
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        });
+                    } else {
+                        resolve(false);
+                    }
+                })
+            });
+	}
+    
+    // 群排行榜
+    private groupRank(shareTicket):void
+	{
+		this._rankMask.visible=true;
+
+		platform.sendShareData({
+            command:"open",
+            type:"group",
+            groupid:shareTicket
+        });
+
+		this._rankBit = platform.openDataContext.createDisplayObject(null,this.stage.stageWidth, this.stage.stageHeight);
+		this._rankBit.touchEnabled=true;
+		this._rankBit.pixelHitTest=true;
+		this.addChild(this._rankBit);
+		this._rankMask.addEventListener(egret.TouchEvent.TOUCH_TAP,this.onMask,this);
+	}
 
 }
