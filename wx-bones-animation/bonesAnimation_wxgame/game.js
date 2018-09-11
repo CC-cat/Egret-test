@@ -6,6 +6,8 @@ require('./egret.wxgame.js');
 // 启动微信小游戏本地缓存，如果开发者不需要此功能，只需注释即可
 require('./library/image.js');
 require('./library/text.js');
+require('./library/sound.js');
+require('./library/binary.js');
 
 egret.runEgret({
     //以下为自动修改，请勿修改
@@ -13,7 +15,7 @@ egret.runEgret({
     //----auto option start----
 		entryClassName: "Main",
 		orientation: "auto",
-		frameRate: 30,
+		frameRate: 60,
 		scaleMode: "fixedWidth",
 		contentWidth: 640,
 		contentHeight: 1136,

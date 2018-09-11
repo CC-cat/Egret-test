@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,Robot_json,texture_json,texture_png,Robot2_json,texture2_json,texture2_png",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,排行-按下_png,排行-普通_png,排行榜 世界标签--未选中_png,排行榜 世界标签--选中_png,排行榜 好友标签-未选中_png,排行榜 好友标签-选中_png,排行榜分享按钮_png,排行榜底板_png,排行榜玩家信息条-别人_png,排行榜玩家信息条-自己_png,排行榜第一名_png,排行榜第三名_png,排行榜第二名_png,排行榜邀请_png,群排行_png,button_down2_png,button_up2_png,checkbox_select_disabled2_png,checkbox_select_down2_png,checkbox_select_up2_png,checkbox_unselect2_png,selected2_png,border2_png,header2_png,bg2_jpg,egret_icon2_png,btn_bg_png,map_json,thumb_pb2_png,track_pb2_png,radiobutton_select_disabled2_png,radiobutton_select_down2_png,radiobutton_select_up2_png,radiobutton_unselect2_png,roundthumb2_png,track_sb2_png,thumb2_png,track2_png,tracklight2_png,handle2_png,off2_png,on2_png,description2_json",
 			"name": "preload"
 		}
 	],
@@ -132,39 +132,224 @@
 			"name": "egret_icon_png"
 		},
 		{
-			"name": "description_json",
+			"url": "config/description.json",
+			"type": "json",
+			"name": "description_json"
+		},
+		{
+			"name": "排行-按下_png",
+			"type": "image",
+			"url": "assets/MyUI/排行-按下.png"
+		},
+		{
+			"name": "排行-普通_png",
+			"type": "image",
+			"url": "assets/MyUI/排行-普通.png"
+		},
+		{
+			"name": "排行榜 世界标签--未选中_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜 世界标签--未选中.png"
+		},
+		{
+			"name": "排行榜 世界标签--选中_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜 世界标签--选中.png"
+		},
+		{
+			"name": "排行榜 好友标签-未选中_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜 好友标签-未选中.png"
+		},
+		{
+			"name": "排行榜 好友标签-选中_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜 好友标签-选中.png"
+		},
+		{
+			"name": "排行榜分享按钮_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜分享按钮.png"
+		},
+		{
+			"name": "排行榜底板_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜底板.png"
+		},
+		{
+			"name": "排行榜玩家信息条-别人_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜玩家信息条-别人.png"
+		},
+		{
+			"name": "排行榜玩家信息条-自己_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜玩家信息条-自己.png"
+		},
+		{
+			"name": "排行榜第一名_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜第一名.png"
+		},
+		{
+			"name": "排行榜第三名_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜第三名.png"
+		},
+		{
+			"name": "排行榜第二名_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜第二名.png"
+		},
+		{
+			"name": "排行榜邀请_png",
+			"type": "image",
+			"url": "assets/MyUI/排行榜邀请.png"
+		},
+		{
+			"name": "群排行_png",
+			"type": "image",
+			"url": "assets/MyUI/群排行.png"
+		},
+		{
+			"name": "button_down2_png",
+			"type": "image",
+			"url": "assets/Button/button_down.png"
+		},
+		{
+			"name": "button_up2_png",
+			"type": "image",
+			"url": "assets/Button/button_up.png"
+		},
+		{
+			"name": "checkbox_select_disabled2_png",
+			"type": "image",
+			"url": "assets/CheckBox/checkbox_select_disabled.png"
+		},
+		{
+			"name": "checkbox_select_down2_png",
+			"type": "image",
+			"url": "assets/CheckBox/checkbox_select_down.png"
+		},
+		{
+			"name": "checkbox_select_up2_png",
+			"type": "image",
+			"url": "assets/CheckBox/checkbox_select_up.png"
+		},
+		{
+			"name": "checkbox_unselect2_png",
+			"type": "image",
+			"url": "assets/CheckBox/checkbox_unselect.png"
+		},
+		{
+			"name": "selected2_png",
+			"type": "image",
+			"url": "assets/ItemRenderer/selected.png"
+		},
+		{
+			"name": "border2_png",
+			"type": "image",
+			"url": "assets/Panel/border.png"
+		},
+		{
+			"name": "header2_png",
+			"type": "image",
+			"url": "assets/Panel/header.png"
+		},
+		{
+			"name": "bg2_jpg",
+			"type": "image",
+			"url": "assets/bg.jpg"
+		},
+		{
+			"name": "egret_icon2_png",
+			"type": "image",
+			"url": "assets/egret_icon.png"
+		},
+		{
+			"name": "btn_bg_png",
+			"type": "image",
+			"url": "res/UI/btn_bg.png"
+		},
+		{
+			"name": "map_json",
+			"type": "json",
+			"url": "res/json/map.json"
+		},
+		{
+			"name": "thumb_pb2_png",
+			"type": "image",
+			"url": "assets/ProgressBar/thumb_pb.png"
+		},
+		{
+			"name": "track_pb2_png",
+			"type": "image",
+			"url": "assets/ProgressBar/track_pb.png"
+		},
+		{
+			"name": "radiobutton_select_disabled2_png",
+			"type": "image",
+			"url": "assets/RadioButton/radiobutton_select_disabled.png"
+		},
+		{
+			"name": "radiobutton_select_down2_png",
+			"type": "image",
+			"url": "assets/RadioButton/radiobutton_select_down.png"
+		},
+		{
+			"name": "radiobutton_select_up2_png",
+			"type": "image",
+			"url": "assets/RadioButton/radiobutton_select_up.png"
+		},
+		{
+			"name": "radiobutton_unselect2_png",
+			"type": "image",
+			"url": "assets/RadioButton/radiobutton_unselect.png"
+		},
+		{
+			"name": "roundthumb2_png",
+			"type": "image",
+			"url": "assets/ScrollBar/roundthumb.png"
+		},
+		{
+			"name": "track_sb2_png",
+			"type": "image",
+			"url": "assets/ScrollBar/track_sb.png"
+		},
+		{
+			"name": "thumb2_png",
+			"type": "image",
+			"url": "assets/Slider/thumb.png"
+		},
+		{
+			"name": "track2_png",
+			"type": "image",
+			"url": "assets/Slider/track.png"
+		},
+		{
+			"name": "tracklight2_png",
+			"type": "image",
+			"url": "assets/Slider/tracklight.png"
+		},
+		{
+			"name": "handle2_png",
+			"type": "image",
+			"url": "assets/ToggleSwitch/handle.png"
+		},
+		{
+			"name": "off2_png",
+			"type": "image",
+			"url": "assets/ToggleSwitch/off.png"
+		},
+		{
+			"name": "on2_png",
+			"type": "image",
+			"url": "assets/ToggleSwitch/on.png"
+		},
+		{
+			"name": "description2_json",
 			"type": "json",
 			"url": "config/description.json"
-		},
-		{
-			"name": "Robot_json",
-			"type": "json",
-			"url": "assets/bonesAnimation/Robot.json"
-		},
-		{
-			"name": "texture_json",
-			"type": "json",
-			"url": "assets/bonesAnimation/texture.json"
-		},
-		{
-			"name": "texture_png",
-			"type": "image",
-			"url": "assets/bonesAnimation/texture.png"
-		},
-		{
-			"name": "Robot2_json",
-			"type": "json",
-			"url": "assets/BonesAnimation/Robot.json"
-		},
-		{
-			"name": "texture2_json",
-			"type": "json",
-			"url": "assets/BonesAnimation/texture.json"
-		},
-		{
-			"name": "texture2_png",
-			"type": "image",
-			"url": "assets/BonesAnimation/texture.png"
 		}
 	]
 }

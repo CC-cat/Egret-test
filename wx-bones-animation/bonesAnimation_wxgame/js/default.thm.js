@@ -1,4 +1,6 @@
 var egret = window.egret;window.skins={};
+window.components={};
+window.Common={};
                 function __extends(d, b) {
                     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
                         function __() {
@@ -245,7 +247,147 @@ var egret = window.egret;window.skins={};
 		return t;
 	};
 	return ItemRendererSkin;
-})(eui.Skin);generateEUI.paths['resource/eui_skins/PanelSkin.exml'] = window.skins.PanelSkin = (function (_super) {
+})(eui.Skin);generateEUI.paths['resource/eui_skins/ListGroup.exml'] = window.components.ListGroup = (function (_super) {
+	__extends(ListGroup, _super);
+	var ListGroup$Skin1 = 	(function (_super) {
+		__extends(ListGroup$Skin1, _super);
+		function ListGroup$Skin1() {
+			_super.call(this);
+			this.skinParts = [];
+			
+			this.height = 64;
+			this.elementsContent = [this._Image1_i(),this._Label1_i()];
+			this.states = [
+				new eui.State ("up",
+					[
+					])
+				,
+				new eui.State ("down",
+					[
+						new eui.SetProperty("_Image1","source","button_down_png"),
+						new eui.SetProperty("_Label1","textColor",0x000000)
+					])
+				,
+				new eui.State ("disabled",
+					[
+					])
+			];
+			
+			eui.Binding.$bindProperties(this, ["hostComponent.data.label"],[0],this._Label1,"text");
+		}
+		var _proto = ListGroup$Skin1.prototype;
+
+		_proto._Image1_i = function () {
+			var t = new eui.Image();
+			this._Image1 = t;
+			t.percentHeight = 100;
+			t.scale9Grid = new egret.Rectangle(1,3,8,8);
+			t.source = "selected_png";
+			t.percentWidth = 100;
+			return t;
+		};
+		_proto._Label1_i = function () {
+			var t = new eui.Label();
+			this._Label1 = t;
+			t.fontFamily = "Tahoma";
+			t.left = 32;
+			t.size = 24;
+			t.textColor = 0x555555;
+			t.verticalCenter = 0;
+			return t;
+		};
+		return ListGroup$Skin1;
+	})(eui.Skin);
+
+	function ListGroup() {
+		_super.call(this);
+		this.skinParts = ["list"];
+		
+		this.elementsContent = [this._Image1_i(),this._Scroller1_i()];
+	}
+	var _proto = ListGroup.prototype;
+
+	_proto._Image1_i = function () {
+		var t = new eui.Image();
+		t.percentHeight = 100;
+		t.scale9Grid = new egret.Rectangle(2,2,173,43);
+		t.source = "border_png";
+		t.percentWidth = 100;
+		return t;
+	};
+	_proto._Scroller1_i = function () {
+		var t = new eui.Scroller();
+		t.bottom = 1;
+		t.left = 1;
+		t.right = 1;
+		t.top = 1;
+		t.viewport = this.list_i();
+		return t;
+	};
+	_proto.list_i = function () {
+		var t = new eui.List();
+		this.list = t;
+		t.itemRendererSkinName = ListGroup$Skin1;
+		t.dataProvider = this._ArrayCollection1_i();
+		return t;
+	};
+	_proto._ArrayCollection1_i = function () {
+		var t = new eui.ArrayCollection();
+		t.source = [this._Object1_i(),this._Object2_i(),this._Object3_i(),this._Object4_i(),this._Object5_i(),this._Object6_i(),this._Object7_i(),this._Object8_i(),this._Object9_i(),this._Object10_i()];
+		return t;
+	};
+	_proto._Object1_i = function () {
+		var t = {};
+		t.label = "关卡 1-1 初出茅庐";
+		return t;
+	};
+	_proto._Object2_i = function () {
+		var t = {};
+		t.label = "关卡 1-2 一战成名";
+		return t;
+	};
+	_proto._Object3_i = function () {
+		var t = {};
+		t.label = "关卡 1-3 历尽艰辛";
+		return t;
+	};
+	_proto._Object4_i = function () {
+		var t = {};
+		t.label = "关卡 1-4 百年好合";
+		return t;
+	};
+	_proto._Object5_i = function () {
+		var t = {};
+		t.label = "关卡 1-5 刻苦锻炼";
+		return t;
+	};
+	_proto._Object6_i = function () {
+		var t = {};
+		t.label = "关卡 1-6 天下第一";
+		return t;
+	};
+	_proto._Object7_i = function () {
+		var t = {};
+		t.label = "关卡 1-7 蓦然回首";
+		return t;
+	};
+	_proto._Object8_i = function () {
+		var t = {};
+		t.label = "关卡 1-8 独孤求败";
+		return t;
+	};
+	_proto._Object9_i = function () {
+		var t = {};
+		t.label = "关卡 1-9 成宗立派";
+		return t;
+	};
+	_proto._Object10_i = function () {
+		var t = {};
+		t.label = "关卡 1-10 香火绵延";
+		return t;
+	};
+	return ListGroup;
+})(eui.Group);generateEUI.paths['resource/eui_skins/PanelSkin.exml'] = window.skins.PanelSkin = (function (_super) {
 	__extends(PanelSkin, _super);
 	function PanelSkin() {
 		_super.call(this);
@@ -421,6 +563,53 @@ var egret = window.egret;window.skins={};
 		return t;
 	};
 	return RadioButtonSkin;
+})(eui.Skin);generateEUI.paths['resource/eui_skins/ScrollerPanelSkin.exml'] = window.Common.ScrollerPanelSkin = (function (_super) {
+	__extends(ScrollerPanelSkin, _super);
+	function ScrollerPanelSkin() {
+		_super.call(this);
+		this.skinParts = ["horizontalScrollBar","verticalScrollBar","dataList"];
+		
+		this.minHeight = 20;
+		this.minWidth = 20;
+		this.elementsContent = [this.horizontalScrollBar_i(),this.verticalScrollBar_i(),this.dataList_i()];
+	}
+	var _proto = ScrollerPanelSkin.prototype;
+
+	_proto.horizontalScrollBar_i = function () {
+		var t = new eui.HScrollBar();
+		this.horizontalScrollBar = t;
+		t.autoVisibility = false;
+		t.bottom = 0;
+		t.visible = false;
+		t.percentWidth = 100;
+		return t;
+	};
+	_proto.verticalScrollBar_i = function () {
+		var t = new eui.VScrollBar();
+		this.verticalScrollBar = t;
+		t.autoVisibility = false;
+		t.percentHeight = 100;
+		t.right = 0;
+		t.visible = false;
+		return t;
+	};
+	_proto.dataList_i = function () {
+		var t = new eui.List();
+		this.dataList = t;
+		t.percentHeight = 100;
+		t.percentWidth = 100;
+		t.x = 0;
+		t.y = 0;
+		t.layout = this._VerticalLayout1_i();
+		return t;
+	};
+	_proto._VerticalLayout1_i = function () {
+		var t = new eui.VerticalLayout();
+		t.horizontalAlign = "center";
+		t.verticalAlign = "middle";
+		return t;
+	};
+	return ScrollerPanelSkin;
 })(eui.Skin);generateEUI.paths['resource/eui_skins/ScrollerSkin.exml'] = window.skins.ScrollerSkin = (function (_super) {
 	__extends(ScrollerSkin, _super);
 	function ScrollerSkin() {

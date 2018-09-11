@@ -1,0 +1,10 @@
+{
+	"MapInfo": [
+		{
+			"level": "1",
+			"propName":"bow",
+			"propNum": "1",
+			"mapItem": "1_2,2_3"
+		}
+	]
+}

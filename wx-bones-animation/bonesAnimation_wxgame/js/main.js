@@ -209,25 +209,28 @@ var Main = (function (_super) {
     };
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var userInfo;
+            var platform, userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()];
+                    case 0:
+                        platform = window.platform;
+                        return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
                         this.createGameScene();
                         // const result = await RES.getResAsync("description_json")
-                        // this.startAnimation(result);
                         return [4 /*yield*/, platform.login()];
                     case 2:
                         // const result = await RES.getResAsync("description_json")
-                        // this.startAnimation(result);
                         _a.sent();
                         return [4 /*yield*/, platform.getUserInfo()];
                     case 3:
                         userInfo = _a.sent();
                         this.userInfo = userInfo;
                         console.log(this.userInfo);
+                        platform.sendShareData({
+                            command: "load"
+                        });
                         return [2 /*return*/];
                 }
             });
@@ -284,104 +287,102 @@ var Main = (function (_super) {
         return result;
     };
     /**
-     * 描述文件加载成功，开始播放动画
-     * Description file loading is successful, start to play the animation
-     */
-    Main.prototype.startAnimation = function (result) {
-        // let parser = new egret.HtmlTextParser();
-        // let textflowArr = result.map(text => parser.parse(text));
-        // let textfield = this.textfield;
-        // let count = -1;
-        // let change = () => {
-        //     count++;
-        //     if (count >= textflowArr.length) {
-        //         count = 0;
-        //     }
-        //     let textFlow = textflowArr[count];
-        //     // 切换描述内容
-        //     // Switch to described content
-        //     textfield.textFlow = textFlow;
-        //     let tw = egret.Tween.get(textfield);
-        //     tw.to({ "alpha": 1 }, 200);
-        //     tw.wait(2000);
-        //     tw.to({ "alpha": 0 }, 200);
-        //     tw.call(change, this);
-        // };
-        // change();
-    };
-    /**
      * 创建场景界面
      * Create scene interface
      */
     Main.prototype.createGameScene = function () {
-        var sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
+        var sky = this.createBitmapByName("bg_jpg");
         sky.width = stageW;
         sky.height = stageH;
+        this.addChild(sky);
+        // 遮罩
+        this._mask = new egret.Shape();
+        this._mask.graphics.beginFill(0x000000, 0.7);
+        this._mask.graphics.drawRect(0, 0, stageW, stageH);
+        this._mask.graphics.endFill();
+        this.addChild(this._mask);
         // 好友排行榜按钮
-        this.rankBtn = new eui.Button();
-        this.rankBtn.label = "排行";
-        this.rankBtn.x = stageW / 2;
-        this.rankBtn.y = stageH / 2;
-        this.addChild(this.rankBtn);
-        this.rankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onClickRankBtn, this);
+        this._friendRankBtn = new eui.Button();
+        this._friendRankBtn.label = "好友排行";
+        this._friendRankBtn.y = 100;
+        this._friendRankBtn.x = 30;
+        this._friendRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.friendRank, this);
+        this.addChild(this._friendRankBtn);
+        this._groupRanktBtn = new eui.Button();
+        this._groupRanktBtn.label = "群排行";
+        this._groupRanktBtn.y = this._friendRankBtn.y;
+        this._groupRanktBtn.x = this._friendRankBtn.x + this._friendRankBtn.width + 20;
+        this._groupRanktBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.clickGroup, this);
+        this.addChild(this._groupRanktBtn);
         // 加载 好友排行榜资源
-        var platform = window.platform;
         platform.openDataContext.postMessage({
             command: 'loadRes'
         });
-        // 好友排行榜 返回按钮
-        this.exitRankBtn = new eui.Button();
-        this.exitRankBtn.label = "返回";
-        this.exitRankBtn.x = stageW / 4;
-        this.exitRankBtn.y = stageH - 100;
-        this.exitRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            this.isdisplay = true;
-            this.onClickRankBtn();
-        }, this);
+        // 处理遮罩，避免开放数据域事件影响主域。
+        this._rankMask = new egret.Shape();
+        this._rankMask.graphics.beginFill(0x000000, 0.5);
+        this._rankMask.graphics.drawRect(0, 0, stageW, stageH);
+        this._rankMask.graphics.endFill();
+        this.addChild(this._rankMask);
+        this._rankMask.touchEnabled = true;
+        this._rankMask.visible = false;
         // 用户分数收集
-        var title = new egret.TextField();
-        title.text = "请输入分数：";
-        title.x = 40;
-        title.y = 200;
-        title.textColor = 0xffffff;
-        title.stroke = 3;
-        title.strokeColor = 0x999999;
-        this.addChild(title);
+        // let title: egret.TextField = new egret.TextField();
+        // title.text = "请输入分数：";
+        // title.x = 40;
+        // title.y = 100;
+        // title.textColor = 0xffffff;
+        // title.stroke = 3;
+        // title.strokeColor = 0x999999;
+        // this.addChild(title);
         // 用户输入框
-        this.userNameInput = new egret.TextField();
-        this.userNameInput.type = egret.TextFieldType.INPUT;
-        this.userNameInput.width = 360;
-        this.userNameInput.height = 60;
-        this.userNameInput.border = true;
-        this.userNameInput.borderColor = 0x999999;
-        this.userNameInput.verticalAlign = egret.VerticalAlign.MIDDLE;
-        this.userNameInput.textAlign = egret.HorizontalAlign.CENTER;
-        this.userNameInput.x = title.x + title.width + 10;
-        this.userNameInput.y = title.y - 10;
-        this.userNameInput.text = '';
-        this.userNameInput.textColor = 0x000000;
-        this.addChild(this.userNameInput);
-        // 用户输入框 白色背景
-        var userNameInputBg = new egret.Shape;
-        userNameInputBg.graphics.beginFill(0xffffff, 1);
-        userNameInputBg.width = this.userNameInput.width;
-        userNameInputBg.height = this.userNameInput.height;
-        userNameInputBg.x = this.userNameInput.x;
-        userNameInputBg.y = this.userNameInput.y;
-        userNameInputBg.graphics.drawRect(0, 0, this.userNameInput.width, this.userNameInput.height);
-        userNameInputBg.graphics.endFill();
-        userNameInputBg.alpha = 0.8;
-        this.addChild(userNameInputBg);
-        this.setChildIndex(userNameInputBg, 1);
-        this.setChildIndex(this.userNameInput, 2);
+        // this.userNameInput = new egret.TextField();
+        // this.userNameInput.type = egret.TextFieldType.INPUT;
+        // this.userNameInput.width = 360;
+        // this.userNameInput.height = 60;
+        // this.userNameInput.border = true;
+        // this.userNameInput.borderColor = 0x999999;
+        // this.userNameInput.verticalAlign = egret.VerticalAlign.MIDDLE;
+        // this.userNameInput.textAlign = egret.HorizontalAlign.CENTER;
+        // this.userNameInput.x = title.x + title.width + 10;
+        // this.userNameInput.y = title.y - 10;
+        // this.userNameInput.text = '';
+        // this.userNameInput.textColor = 0x000000;
+        // this.addChild(this.userNameInput);
+        // // 用户输入框 白色背景
+        // let userNameInputBg = new egret.Shape;
+        // userNameInputBg.graphics.beginFill(0xffffff, 1);
+        // userNameInputBg.width = this.userNameInput.width;
+        // userNameInputBg.height = this.userNameInput.height;
+        // userNameInputBg.x = this.userNameInput.x;
+        // userNameInputBg.y = this.userNameInput.y;
+        // userNameInputBg.graphics.drawRect(0, 0, this.userNameInput.width, this.userNameInput.height);
+        // userNameInputBg.graphics.endFill();
+        // userNameInputBg.alpha = 0.8;
+        // this.addChild(userNameInputBg);
+        // this.setChildIndex(userNameInputBg, 3);
+        // this.setChildIndex(this.userNameInput, 4);
+        this.scrollerPanel = new ScrollerPanel();
+        this.scrollerPanel.x = 10;
+        this.scrollerPanel.y = 200;
+        this.addChild(this.scrollerPanel);
+        // 这块需要用到eui的可视化编辑功能，请下载代码示例查看
+        // ListGroup是EXML文件，可以进行可视化编辑
+        var listGroup = new components.ListGroup();
+        listGroup.width = 400;
+        listGroup.height = 500;
+        listGroup.x = 30;
+        listGroup.y = 400;
+        this.addChild(listGroup);
     };
-    Main.prototype.onClickRankBtn = function () {
-        var platform = window.platform;
+    /*
+    private onClickRankBtn() {
+        // const platform: any = window.platform;
         if (this.isdisplay) {
-            console.log('点击 返回 按钮');
+            console.log('点击 关闭 按钮');
+            
             this.bitmap.parent && this.bitmap.parent.removeChild(this.bitmap);
             this.rankingListMask.parent && this.rankingListMask.parent.removeChild(this.rankingListMask);
             this.isdisplay = false;
@@ -391,11 +392,13 @@ var Main = (function (_super) {
                 year: (new Date()).getFullYear(),
                 command: "close"
             });
+
             this.removeChild(this.exitRankBtn);
-        }
-        else {
+
+        } else {
             console.log('点击 好友排行榜 按钮');
-            console.log(this.userNameInput.text);
+            // console.log(this.userNameInput.text);
+
             //处理遮罩，避免开放数据域事件影响主域。
             this.rankingListMask = new egret.Shape();
             this.rankingListMask.graphics.beginFill(0x000000, 1);
@@ -404,31 +407,99 @@ var Main = (function (_super) {
             this.rankingListMask.alpha = 0.5;
             this.rankingListMask.touchEnabled = true;
             this.addChild(this.rankingListMask);
+            
             //主要示例代码开始
             this.bitmap = platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
             this.addChild(this.bitmap);
+
             //主域向子域发送自定义消息
             platform.openDataContext.postMessage({
                 isDisplay: this.isdisplay,
-                text: this.userNameInput.text,
                 data: {
-                    key: '',
+                    key:'',
                     name: this.userInfo.nickName,
                     url: this.userInfo.avatarUrl,
-                    scroes: this.userNameInput.text
+                    scroes: '11'
                 },
                 year: (new Date()).getFullYear(),
                 command: "open"
             });
-            //主要示例代码结束  
+            //主要示例代码结束
+
             this.isdisplay = true;
+
+
             // 上传分数 不好用，先留着
-            var score = this.userNameInput.text;
-            platform.setUserCloudStorage([{ key: "score", value: score + "" }]);
+            // let score = '11';
+            // platform.setUserCloudStorage([{key:"score", value: score + ""}]);
             // 上传分数 不好用，先留着
+
             // 返回按钮
             this.addChild(this.exitRankBtn);
+            
         }
+    }
+    */
+    // 好友排行榜 点击onclick
+    Main.prototype.friendRank = function () {
+        this._rankMask.visible = true;
+        platform.sendShareData({
+            command: "open",
+            type: "friend"
+        });
+        this._rankBit = platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
+        this._rankBit.touchEnabled = true;
+        this._rankBit.pixelHitTest = true;
+        this._rankMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onMask, this);
+        this.addChild(this._rankBit);
+    };
+    // 遮罩
+    Main.prototype.onMask = function (e) {
+        platform.sendShareData({
+            command: "close"
+        });
+        this._mask.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.onMask, this);
+        this._rankMask.visible = false;
+        this.removeChild(this._rankBit);
+    };
+    // 群排行榜 点击onclick
+    Main.prototype.clickGroup = function () {
+        var _this = this;
+        var desc = "vae";
+        var imgurl = "resource/assets/icon" + (1 + Math.floor(Math.random() * 4)) + ".jpg";
+        return new Promise(function (resolve, reject) {
+            platform.updateShareMenu(true).then(function (data) {
+                console.log(data);
+                if (data) {
+                    return platform.shareApp("群主别踢,我就是看看谁的手速最快," + desc, imgurl, desc).then(function (data) {
+                        if (data && data.shareTickets && data.shareTickets.length > 0) {
+                            _this.groupRank(data.shareTickets[0]);
+                            resolve(true);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    });
+                }
+                else {
+                    resolve(false);
+                }
+            });
+        });
+    };
+    // 群排行榜
+    Main.prototype.groupRank = function (shareTicket) {
+        this._rankMask.visible = true;
+        platform.sendShareData({
+            command: "open",
+            type: "group",
+            groupid: shareTicket
+        });
+        this._rankBit = platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
+        this._rankBit.touchEnabled = true;
+        this._rankBit.pixelHitTest = true;
+        this.addChild(this._rankBit);
+        this._rankMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onMask, this);
     };
     return Main;
 }(eui.UILayer));
@@ -450,6 +521,13 @@ var DebugPlatform = (function () {
             });
         });
     };
+    DebugPlatform.prototype.showAD = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
+        });
+    };
     DebugPlatform.prototype.setUserCloudStorage = function (kvobj) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -457,12 +535,104 @@ var DebugPlatform = (function () {
             });
         });
     };
+    DebugPlatform.prototype.shareAppMessage = function (title, imgurl, query) {
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
+    };
+    DebugPlatform.prototype.sendShareData = function (kvobj) { };
+    DebugPlatform.prototype.getLaunchOptionsSync = function () { };
+    DebugPlatform.prototype.shareApp = function (title, imgurl, query) {
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
+    };
+    DebugPlatform.prototype.updateShareMenu = function (withticket) {
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
+    };
     return DebugPlatform;
 }());
 __reflect(DebugPlatform.prototype, "DebugPlatform", ["Platform"]);
 if (!window.platform) {
     window.platform = new DebugPlatform();
 }
+/**
+ * 滑动列表
+ * 使用虚拟布局、自定义项呈现器
+ * 不需要初始化item只需要添加皮肤
+ *
+ */
+var ScrollerPanel = (function (_super) {
+    __extends(ScrollerPanel, _super);
+    function ScrollerPanel() {
+        var _this = _super.call(this) || this;
+        //创建一个列表
+        var myGroup2 = new eui.Group();
+        _this.addChild(myGroup2);
+        myGroup2.layout = new eui.BasicLayout();
+        myGroup2.width = 500;
+        myGroup2.height = 60;
+        var btn1 = new eui.Button();
+        btn1.label = "egret 按钮 1";
+        var btn2 = new eui.Button();
+        btn2.label = "egret 按钮 2";
+        var btn3 = new eui.Button();
+        btn3.label = "egret 按钮 3";
+        var btn4 = new eui.Button();
+        btn4.label = "egret 按钮 4";
+        var btn5 = new eui.Button();
+        btn5.label = "egret 按钮 5";
+        var btn6 = new eui.Button();
+        btn6.label = "egret 按钮 6";
+        myGroup2.addChild(btn1);
+        myGroup2.addChild(btn2);
+        myGroup2.addChild(btn3);
+        myGroup2.addChild(btn4);
+        myGroup2.addChild(btn5);
+        myGroup2.addChild(btn6);
+        var hLayout = new eui.HorizontalLayout();
+        hLayout.gap = 10;
+        hLayout.paddingTop = 30;
+        hLayout.horizontalAlign = egret.HorizontalAlign.CENTER;
+        myGroup2.layout = hLayout; /// 水平布局
+        // var list = new eui.List();
+        // list.dataProvider = new eui.ArrayCollection([1, 2, 3, 4, 5]);
+        //创建一个 Scroller
+        var scroller = new eui.Scroller();
+        scroller.height = 60;
+        scroller.viewport = myGroup2;
+        _this.addChild(scroller);
+        _this.scroller = scroller;
+        _this.scroller.scrollPolicyH = eui.ScrollPolicy.ON; // 横向
+        _this.scroller.scrollPolicyV = eui.ScrollPolicy.OFF; // 竖向
+        // eui.TileLayout.orientation = eui.TileOrientation.ROWS;
+        //创建一个按钮，点击后改变 Scroller 滚动的位置
+        var btn = new eui.Button();
+        btn.label = '点击向右';
+        btn.x = 200;
+        btn.y = 70;
+        _this.addChild(btn);
+        btn.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.moveScroller, _this);
+        return _this;
+    }
+    ScrollerPanel.prototype.createChildren = function () {
+        //初始化后改变滚动的位置
+        this.scroller.viewport.validateNow();
+        this.scroller.viewport.scrollV = 40;
+    };
+    ScrollerPanel.prototype.moveScroller = function () {
+        //点击按钮后改变滚动的位置
+        var sc = this.scroller;
+        sc.viewport.scrollH += 10;
+        if ((sc.viewport.scrollH + sc.width) >= sc.viewport.contentWidth) {
+            console.log("滚动到底部了");
+        }
+    };
+    return ScrollerPanel;
+}(eui.UILayer));
+__reflect(ScrollerPanel.prototype, "ScrollerPanel");
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-present, Egret Technology.
